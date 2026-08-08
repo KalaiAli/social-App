@@ -3,11 +3,21 @@ import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
-export function AuthContextProvider({children}) {
-  
-    const[userToken,setuserToken ]=useState (null);
+export function AuthContextProvider({ children }) {
+  const [userToken, setuserToken] = useState(() => {
+    return localStorage.getItem("token");
+  });
 
-  return <AuthContext.Provider value={{userToken,setuserToken}}>
-    {children}
-  </AuthContext.Provider>;
+  // useEffect(()=> {
+  //    if  (localStorage.getItem('token')) {
+  //     setuserToken(localStorage.getItem('token'))
+  //    }
+  // },[])
+  // useEffect
+
+  return (
+    <AuthContext.Provider value={{ userToken, setuserToken }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

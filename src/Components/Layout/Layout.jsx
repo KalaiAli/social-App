@@ -4,13 +4,15 @@ import Navbar from "../Navbar/Navbar";
 export default function Layout() {
 
 
-  return <>
+  return (
+    <>
+      <Navbar />
 
-  <Navbar/>
+      <main className="pt-20">
+        <Outlet />
+      </main>
 
-   <Outlet/>
-   
-  <Footer/>
-
-  </>;
+      <Footer />
+    </>
+  );
 }

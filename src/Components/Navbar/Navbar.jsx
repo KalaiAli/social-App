@@ -1,7 +1,9 @@
 import { AuthContext } from "../../Context/AuthContext";
 import { CounterContext } from "../../Context/CounterContext";
 import { useContext, useState } from "react";
-import { useNavigate,  NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
+
+
 export default function Navbar() {
   let { userToken, setuserToken } = useContext(AuthContext);
 
@@ -9,30 +11,28 @@ export default function Navbar() {
   useContext(CounterContext);
 
   const [isOpen, setisOpen] = useState(false);
+
   function toggleCheck() {
     setisOpen(!isOpen);
   }
 
-  function logout() {
-    localStorage.remove("tekoen");
+  function logOut() {
+    localStorage.removeItem("token");
     setuserToken(null);
     navigate("/");
   }
 
   return (
-    <nav className="bg-neutral-primary fixed w-full  inset-s-0 border-b border-default">
+    <nav className="bg-neutral-primary fixed w-full  inset-s-0 border-b border-default top-0 left-0 z-50 bg-white">
       <div className="max-w-7xl flex flex-wrap md:flex-nowrap md:gap-10  items-center justify-between mx-auto p-4">
-        <a
-          href="#"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
+        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img
             src="https://flowbite.com/docs/images/logo.svg"
             className="h-7"
             alt="Flowbite Logo"
           />
           <span className="self-center text-xl text-heading font-semibold whitespace-nowrap">
-            SOCIAl APP
+            SOCIAL APP
           </span>
         </a>
         <button
@@ -55,8 +55,8 @@ export default function Navbar() {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeWidth="2"
               d="M5 7h14M5 12h14M5 17h14"
             />
           </svg>
@@ -113,12 +113,20 @@ export default function Navbar() {
             ) : (
               <>
                 <li>
-                  <NavLink
-                    onClick={logout}
-                    to="/register"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
+                  <span
+                    onClick={logOut}
+                    to="/"
+                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 cursor-pointer"
                   >
                     Logout
+                  </span>
+                </li>
+                <li>
+                  <NavLink
+                    to="/change-password"
+                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
+                  >
+                    Change Password
                   </NavLink>
                 </li>
               </>

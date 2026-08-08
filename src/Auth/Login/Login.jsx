@@ -53,6 +53,7 @@ export default function Login() {
 
           // setMessage("Account created successfully!");
           // console.log(message);
+          
           navigate("/home");
         }
       })

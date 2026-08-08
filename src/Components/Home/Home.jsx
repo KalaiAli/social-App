@@ -1,41 +1,62 @@
-import { useContext } from "react";
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect, useState } from "react";
 import { CounterContext } from "../../Context/CounterContext";
+import axios from "axios";
+import Spinner from "../Spinner/Spinner";
+import CardPost from "../CardPost/CardPost";
 
 export default function Home() {
   const { counter, setCounter } = useContext(CounterContext);
+  // eslint-disable-next-line no-unused-vars
+  const [AllPosts, setallPosts] = useState(null);
 
-return (
-  <div className="container mx-auto py-10">
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6 text-center">
-      <h1 className="text-3xl font-bold mb-4">Welcome Home 👋</h1>
+  // eslint-disable-next-line no-unused-vars
 
-      <p className="text-gray-600 mb-2">Current Counter</p>
+  const [error, setError] = useState(null);
+  const [isError, setisError] = useState(false);
 
-      <h2 className="text-5xl font-bold text-blue-600 mb-6">{counter}</h2>
+  const [isLoading, setisLoading] = useState(true);
 
-      <div className="flex justify-center gap-4">
-        <button
-          onClick={() => setCounter(counter - 1)}
-          className="px-5 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        >
-          -
-        </button>
+  function getPosts() {
+    axios
+      .get("https://route-posts.routemisr.com/posts", {
+        params: {sort:'createdAt'},
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
+      .then((response) => {
+        console.log(response.data.data.posts);
+        setallPosts(response.data.data.posts);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setisError(true);
+        setError("Error : No Posts");
+      })
+      .finally(() => {
+        setisLoading(false);
+      });
+  }
 
-        <button
-          onClick={() => setCounter(0)}
-          className="px-5 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
-        >
-          Reset
-        </button>
+  useEffect(() => {
+    getPosts();
+  }, []);
 
-        <button
-          onClick={() => setCounter(counter + 1)}
-          className="px-5 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-        >
-          +
-        </button>
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <div className="text-red-600 text-xl font-semibold">{error}</div>
       </div>
+    );
+  }
+  return (
+    <div className="w-1/2 mx-auto mb-5 -mt-5">
+      {AllPosts?.map((post) => (
+        <CardPost key ={post._id} post={post} />
+      ))}
     </div>
-  </div>
-);
+  );
 }
