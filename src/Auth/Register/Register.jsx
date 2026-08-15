@@ -11,7 +11,11 @@ import axios from "axios";
 
 import { schema } from "../../schema/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../../Context/AuthContext";
+import { schemaYup } from "../../schema/YupRegisterShema";
+
+
 
 export default function Register() {
   let { setuserToken } = useContext(AuthContext);
@@ -38,7 +42,7 @@ export default function Register() {
       gender: "",
     },
     mode: "onBlur",
-    resolver: zodResolver(schema),
+    resolver: yupResolver(schemaYup),
   });
 
   // async function submitForm(userObj) {

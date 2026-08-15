@@ -1,26 +1,34 @@
 import { useContext, useState } from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthContext } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { changePasswordSchema } from "../../schema/changePasswordSchema";
 
 export default function ChangePassword() {
   const navigate = useNavigate();
   const { userToken, setuserToken } = useContext(AuthContext);
 
-  const [formData, setFormData] = useState({
-    password: "",
-    newPassword: "",
-  });
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      password: "",
+      newPassword: "",
+    },
+    mode: "onBlur",
+    resolver: zodResolver(changePasswordSchema),
+  });
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function submitForm(formData) {
     setErrorMsg("");
     setSuccessMsg("");
     setIsLoading(true);
@@ -38,9 +46,9 @@ export default function ChangePassword() {
       );
 
       setSuccessMsg("Password changed successfully. Redirecting to login...");
-      setFormData({ password: "", newPassword: "" });
 
-      // Give the user a moment to see the message, then log out and redirect
+      reset();
+
       setTimeout(() => {
         localStorage.removeItem("token");
         setuserToken(null);
@@ -57,25 +65,31 @@ export default function ChangePassword() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border border-gray-300 rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+    <div className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-xl p-6">
+      <h2 className="text-2xl font-bold mb-6">Change Password</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(submitForm)} className="space-y-4">
+        {/* Current Password */}
         <div>
           <label htmlFor="password" className="block text-sm font-medium mb-1">
             Current Password
           </label>
+
           <input
             id="password"
-            name="password"
             type="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
+            {...register("password")}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          {errors.password && (
+            <p className="text-sm text-red-500 mt-1">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
+        {/* New Password */}
         <div>
           <label
             htmlFor="newPassword"
@@ -83,20 +97,28 @@ export default function ChangePassword() {
           >
             New Password
           </label>
+
           <input
             id="newPassword"
-            name="newPassword"
             type="password"
-            value={formData.newPassword}
-            onChange={handleChange}
-            required
+            {...register("newPassword")}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          {errors.newPassword && (
+            <p className="text-sm text-red-500 mt-1">
+              {errors.newPassword.message}
+            </p>
+          )}
         </div>
 
+        {/* API Error */}
         {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
+
+        {/* Success */}
         {successMsg && <p className="text-sm text-green-600">{successMsg}</p>}
 
+        {/* Submit */}
         <button
           type="submit"
           disabled={isLoading}
