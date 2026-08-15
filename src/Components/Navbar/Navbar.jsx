@@ -3,9 +3,10 @@ import { CounterContext } from "../../Context/CounterContext";
 import { useContext, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 
-
 export default function Navbar() {
-  let { userToken, setuserToken } = useContext(AuthContext);
+
+
+  let { userToken, setuserToken,userData} = useContext(AuthContext);
 
   let navigate = useNavigate();
   useContext(CounterContext);
@@ -21,7 +22,7 @@ export default function Navbar() {
     setuserToken(null);
     navigate("/");
   }
-
+console.log(userData)
   return (
     <nav className="bg-neutral-primary fixed w-full  inset-s-0 border-b border-default top-0 left-0 z-50 bg-white">
       <div className="max-w-7xl flex flex-wrap md:flex-nowrap md:gap-10  items-center justify-between mx-auto p-4">
@@ -112,6 +113,10 @@ export default function Navbar() {
               </>
             ) : (
               <>
+                <li>
+                  {" "}
+                  <span className="text-green-600 font-bold  hover:text-red-500 ">Welcome {userData?.name}</span>
+                </li>
                 <li>
                   <span
                     onClick={logOut}

@@ -1,22 +1,33 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState } from "react";
-
+import axios from "axios";
+import { createContext, useState, useEffect } from "react";
 export const AuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
-  const [userToken, setuserToken] = useState(() => {
-    return localStorage.getItem("token");
-  });
+  const [userToken, setuserToken] = useState(null);
 
-  // useEffect(()=> {
-  //    if  (localStorage.getItem('token')) {
-  //     setuserToken(localStorage.getItem('token'))
-  //    }
-  // },[])
-  // useEffect
+  const [userData, setuserData] = useState(null);
+
+  async function getUserData() {
+    let { data } = await axios.get(
+      `https://route-posts.routemisr.com/users/profile-data`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+    setuserData(data.data.user);
+  }
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setuserToken(localStorage.getItem("token"));
+      getUserData();
+    }
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ userToken, setuserToken }}>
+    <AuthContext.Provider value={{ userToken, setuserToken, userData }}>
       {children}
     </AuthContext.Provider>
   );
