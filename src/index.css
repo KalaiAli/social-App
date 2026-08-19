@@ -1,3 +1,15 @@
 @import "tailwindcss";
 /*  respect the order */
-@import "@heroui/styles"; 
+@import "@heroui/styles";
+
+.dark {
+  --bg-color: #0f172a;       /* dark blue */
+  --card-color: #172554;     /* blue */
+  --text-color: #e0f2fe;     /* light blue/white */
+  --border-color: #1e40af;   /* blue border */
+}
+
+.dark body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

@@ -1,137 +1,227 @@
+import { useContext, useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Moon, Sun } from "lucide-react";
 import { AuthContext } from "../../Context/AuthContext";
-import { CounterContext } from "../../Context/CounterContext";
-import { useContext, useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
 
 export default function Navbar() {
+  const { userToken, setuserToken, userData } = useContext(AuthContext);
 
+  const navigate = useNavigate();
 
-  let { userToken, setuserToken,userData} = useContext(AuthContext);
+  const [isOpen, setIsOpen] = useState(false);
 
-  let navigate = useNavigate();
-  useContext(CounterContext);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
-  const [isOpen, setisOpen] = useState(false);
+  // Apply theme
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
 
-  function toggleCheck() {
-    setisOpen(!isOpen);
+  function toggleMenu() {
+    setIsOpen((prev) => !prev);
+  }
+
+  function closeMenu() {
+    setIsOpen(false);
+  }
+
+  function toggleDarkMode() {
+    setDarkMode((prev) => {
+      const newMode = !prev;
+
+      localStorage.setItem("theme", newMode ? "dark" : "light");
+
+      return newMode;
+    });
   }
 
   function logOut() {
     localStorage.removeItem("token");
     setuserToken(null);
+    setIsOpen(false);
     navigate("/");
   }
-console.log(userData)
+
   return (
-    <nav className="bg-neutral-primary fixed w-full  inset-s-0 border-b border-default top-0 left-0 z-50 bg-white">
-      <div className="max-w-7xl flex flex-wrap md:flex-nowrap md:gap-10  items-center justify-between mx-auto p-4">
-        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-7"
-            alt="Flowbite Logo"
-          />
-          <span className="self-center text-xl text-heading font-semibold whitespace-nowrap">
+    <nav className="fixed left-0 top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm dark:border-blue-300 dark:bg-blue-200">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between p-4">
+        {/* Logo */}
+        <NavLink
+          to={userToken ? "/home" : "/"}
+          onClick={closeMenu}
+          className="flex items-center gap-3"
+        >
+          {/* Tunisian Flag */}
+          <div className="flag-wrapper">
+            <svg
+              className="tunisian-flag"
+              viewBox="0 0 900 600"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="900" height="600" fill="#E70013" />
+
+              <circle cx="450" cy="300" r="150" fill="white" />
+
+              <circle cx="430" cy="300" r="75" fill="#E70013" />
+
+              <circle cx="455" cy="285" r="60" fill="white" />
+
+              <polygon
+                points="
+                  500,300
+                  516,346
+                  564,346
+                  526,374
+                  540,420
+                  500,392
+                  460,420
+                  474,374
+                  436,346
+                  484,346
+                "
+                fill="#E70013"
+              />
+            </svg>
+          </div>
+
+          <span className="whitespace-nowrap text-xl font-semibold text-gray-900 dark:text-blue-950">
             SOCIAL APP
           </span>
-        </a>
+        </NavLink>
+
+        {/* Mobile Menu Button */}
         <button
-          onClick={toggleCheck}
-          data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
-          aria-controls="navbar-default"
-          aria-expanded="false"
+          onClick={toggleMenu}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-blue-950 dark:hover:bg-blue-300 md:hidden"
+          aria-label="Toggle menu"
         >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-6 h-6"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24">
             <path
               stroke="currentColor"
               strokeLinecap="round"
+              strokeLinejoin="round"
               strokeWidth="2"
               d="M5 7h14M5 12h14M5 17h14"
             />
           </svg>
         </button>
+
+        {/* Menu */}
         <div
-          className={`${!isOpen && "hidden"}  "hidden w-full md:flex  md:justify-between md:items-center"`}
-          id="navbar-default"
+          className={`${
+            isOpen ? "block" : "hidden"
+          } w-full md:flex md:w-auto md:flex-1 md:items-center`}
         >
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
-            {userToken !== null ? (
+          {/* Left Menu */}
+          {userToken && (
+            <ul className="mt-4 flex flex-col gap-4 border-t border-gray-200 pt-4 dark:border-blue-300 md:ml-8 md:mt-0 md:flex-row md:gap-8 md:border-0 md:pt-0">
+              <li>
+                <NavLink
+                  to="/home"
+                  onClick={closeMenu}
+                  className="font-medium text-gray-700 hover:text-blue-600 dark:text-blue-950 dark:hover:text-blue-700"
+                >
+                  Home
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/profile"
+                  onClick={closeMenu}
+                  className="font-medium text-gray-700 hover:text-blue-600 dark:text-blue-950 dark:hover:text-blue-700"
+                >
+                  Profile
+                </NavLink>
+              </li>
+            </ul>
+          )}
+
+          {/* Right Menu */}
+          <ul className="mt-4 flex flex-col gap-4 md:ml-auto md:mt-0 md:flex-row md:items-center md:gap-6">
+            {/* Dark Mode */}
+            <li>
+              <button
+                type="button"
+                onClick={toggleDarkMode}
+                className="flex h-9 w-9 items-center justify-center rounded-full text-blue-700 hover:bg-blue-100 dark:text-blue-900 dark:hover:bg-blue-300"
+                aria-label="Toggle dark mode"
+              >
+                {darkMode ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
+            </li>
+
+            {userToken ? (
               <>
-                <li>
-                  <NavLink
-                    to="/home"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
-                  >
-                    Home
-                  </NavLink>
+                {/* User */}
+                <li className="flex items-center gap-2">
+                  {userData?.photo && (
+                    <img
+                      src={userData.photo}
+                      alt={userData?.name || "Profile"}
+                      className="h-8 w-8 rounded-full object-cover"
+                    />
+                  )}
+
+                  <span className="font-semibold text-green-600 dark:text-green-700">
+                    Welcome {userData?.name}
+                  </span>
                 </li>
+
+                {/* Logout */}
+                <li>
+                  <button
+                    type="button"
+                    onClick={logOut}
+                    className="font-medium text-gray-700 hover:text-red-500 dark:text-blue-950 dark:hover:text-red-600"
+                  >
+                    Logout
+                  </button>
+                </li>
+
+                {/* Change Password */}
                 <li>
                   <NavLink
-                    to="/Profile"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
+                    to="/change-password"
+                    onClick={closeMenu}
+                    className="font-medium text-gray-700 hover:text-blue-600 dark:text-blue-950 dark:hover:text-blue-700"
                   >
-                    Profile
+                    Change Password
                   </NavLink>
                 </li>
               </>
             ) : (
-              ""
-            )}
-          </ul>
-
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
-            {userToken == null ? (
               <>
+                {/* Login */}
                 <li>
                   <NavLink
                     to="/"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
+                    onClick={closeMenu}
+                    className="font-medium text-gray-700 hover:text-blue-600 dark:text-blue-950 dark:hover:text-blue-700"
                   >
                     Login
                   </NavLink>
                 </li>
+
+                {/* Register */}
                 <li>
                   <NavLink
                     to="/register"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
+                    onClick={closeMenu}
+                    className="font-medium text-gray-700 hover:text-blue-600 dark:text-blue-950 dark:hover:text-blue-700"
                   >
                     Register
-                  </NavLink>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  {" "}
-                  <span className="text-green-600 font-bold  hover:text-red-500 ">Welcome {userData?.name}</span>
-                </li>
-                <li>
-                  <span
-                    onClick={logOut}
-                    to="/"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 cursor-pointer"
-                  >
-                    Logout
-                  </span>
-                </li>
-                <li>
-                  <NavLink
-                    to="/change-password"
-                    className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0"
-                  >
-                    Change Password
                   </NavLink>
                 </li>
               </>

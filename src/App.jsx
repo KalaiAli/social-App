@@ -19,12 +19,16 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { ToastContainer, toast } from "react-toastify";
 
+// import { useNetworkState } from "react-use";
+
+
 const queryClient = new QueryClient();
 
 function App() {
+  
   let route = createBrowserRouter([
     {
-      path: "",
+      path: "/",
       element: <Layout />,
       children: [
         {

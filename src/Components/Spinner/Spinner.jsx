@@ -1,4 +1,3 @@
-import { FadeLoader } from "react-spinners";
 export default function Spinner() {
   return (
     <div className="min-h-screen flex justify-center items-center">
