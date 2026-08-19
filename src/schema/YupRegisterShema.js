@@ -22,7 +22,7 @@ export const schemaYup = yup.object({
     .required("Password Required")
     .matches(
       passwordRegex,
-      "Your PAssword must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      "Your Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
     ),
   rePassword: yup
     .string()
