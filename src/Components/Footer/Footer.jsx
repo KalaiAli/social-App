@@ -34,20 +34,38 @@ export default function Footer() {
   };
 
   const socialIcons = [
-    { icon: faInstagram, href: "#instagram", label: "Instagram" },
-    { icon: faTwitter, href: "#twitter", label: "Twitter" },
-    { icon: faFacebook, href: "#facebook", label: "Facebook" },
-    { icon: faYoutube, href: "#youtube", label: "YouTube" },
-    { icon: faGithub, href: "#github", label: "GitHub" },
+    {
+      icon: faInstagram,
+      href: "https://www.instagram.com/",
+      label: "Instagram",
+    },
+    {
+      icon: faTwitter,
+      href: "https://x.com/",
+      label: "Twitter / X",
+    },
+    {
+      icon: faFacebook,
+      href: "https://www.facebook.com/",
+      label: "Facebook",
+    },
+    {
+      icon: faYoutube,
+      href: "https://www.youtube.com/",
+      label: "YouTube",
+    },
+    {
+      icon: faGithub,
+      href: "https://github.com/",
+      label: "GitHub",
+    },
   ];
 
   return (
     <footer className="w-full border-t border-gray-200 bg-white text-gray-600 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-400">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-
         {/* Top Section */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
-
           {/* Brand */}
           <div className="lg:col-span-2">
             <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -65,13 +83,12 @@ export default function Footer() {
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-900"
                 >
-                  <FontAwesomeIcon
-                    icon={icon}
-                    className="h-5 w-5"
-                  />
+                  <FontAwesomeIcon icon={icon} className="h-5 w-5" />
                 </a>
               ))}
             </div>
@@ -102,7 +119,6 @@ export default function Footer() {
 
         {/* App Downloads */}
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-y border-gray-100 py-8 dark:border-gray-900 sm:flex-row">
-
           <div>
             <h4 className="text-base font-medium text-gray-900 dark:text-white">
               Take us with you
@@ -114,17 +130,13 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-wrap gap-4">
-
             {/* App Store */}
             <a
-              href="#appstore"
+              href="https://www.apple.com/app-store/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 rounded-xl bg-gray-900 px-4 py-2 text-white transition-all hover:bg-black"
             >
-              <FontAwesomeIcon
-                icon={faApple}
-                className="h-6 w-6"
-              />
-
               <div className="text-left">
                 <p className="text-[10px] uppercase tracking-wider opacity-75">
                   Download on the
@@ -138,14 +150,11 @@ export default function Footer() {
 
             {/* Google Play */}
             <a
-              href="#playstore"
+              href="https://play.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 rounded-xl bg-gray-900 px-4 py-2 text-white transition-all hover:bg-black"
             >
-              <FontAwesomeIcon
-                icon={faGooglePlay}
-                className="h-6 w-6"
-              />
-
               <div className="text-left">
                 <p className="text-[10px] uppercase tracking-wider opacity-75">
                   Get it on
@@ -156,15 +165,12 @@ export default function Footer() {
                 </p>
               </div>
             </a>
-
           </div>
         </div>
 
         {/* Copyright */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
-          <p>
-            &copy; {currentYear} SocialConnect Inc. All rights reserved.
-          </p>
+          <p>&copy; {currentYear} SocialConnect Inc. All rights reserved for Kalai Ali.</p>
 
           <div className="flex gap-6">
             <a href="#privacy" className="hover:text-blue-600">
@@ -180,7 +186,6 @@ export default function Footer() {
             </a>
           </div>
         </div>
-
       </div>
     </footer>
   );

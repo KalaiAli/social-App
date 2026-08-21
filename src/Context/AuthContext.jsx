@@ -12,13 +12,13 @@ export function AuthContextProvider({ children }) {
   const [userData, setuserData] = useState(null);
 
   async function getUserData(token) {
-  console.log("TOKEN:", token);
-  console.log("TOKEN EXISTS:", !!token);
+    console.log("TOKEN:", token);
+    console.log("TOKEN EXISTS:", !!token);
 
-  if (!token) {
-    console.log("No token found");
-    return;
-  }
+    if (!token) {
+      console.log("No token found");
+      return;
+    }
 
     try {
       const { data } = await axios.get(
