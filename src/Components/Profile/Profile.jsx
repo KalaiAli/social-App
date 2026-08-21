@@ -5,6 +5,8 @@ import axios from "axios";
 
 import { AuthContext } from "../../Context/AuthContext";
 import CardPost from './../CardPost/CardPost';
+import { Helmet } from "react-helmet-async";
+import homeIcon from "../../assets/profile.svg";
 
 export default function Profile() {
   const imageRef = useRef(null);
@@ -94,6 +96,23 @@ export default function Profile() {
 
   return (
     <>
+      <Helmet>
+        <title>Profile | Social App</title>
+
+        <meta
+          name="description"
+          content="Explore the CEO profile, professional experience"
+        />
+
+        <meta
+          name="keywords"
+          content="CEO, profile,  business, technology, innovation, professional experience"
+        />
+
+        <meta name="Kalai Ali" content="CEO" />
+
+        <link rel="icon" type="image/png" href={homeIcon} />
+      </Helmet>
       <div className="min-h-screen bg-gray-100 py-10 dark:bg-gray-950">
         <div className="mx-auto max-w-5xl px-4">
           <div className="overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-900">
@@ -195,8 +214,9 @@ export default function Profile() {
         </div>
       </div>
       <div className="mt-4">
-        {data?.data.data.posts.map((post)=>{return <CardPost key={post._id}  post={post} />;})}
-
+        {data?.data.data.posts.map((post) => {
+          return <CardPost key={post._id} post={post} />;
+        })}
       </div>
     </>
   );

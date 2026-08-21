@@ -19,13 +19,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { ToastContainer, toast } from "react-toastify";
 
-// import { useNetworkState } from "react-use";
-
+import { useNetworkState } from "react-use";
+import Offline from "./Components/Offline/Offline";
 
 const queryClient = new QueryClient();
 
 function App() {
-  
+  let { online } = useNetworkState();
+
   let route = createBrowserRouter([
     {
       path: "/",
@@ -85,6 +86,12 @@ function App() {
   ]);
   return (
     <>
+      {!online && (
+        <div className="h-screen bg-gray-300 flex justify-center items-center fixed  z-50 inset-0">
+          <Offline />
+        </div>
+      )}
+
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
           <CounterContextProvider>
